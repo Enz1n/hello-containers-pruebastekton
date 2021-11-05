@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-pyxis-enzo
+  namespace: default
+  labels:
+     app: devops-pyxis-enzo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-pyxis-enzo
+  template:
+    metadata:
+      labels:
+        app: devops-pyxis-enzo
+    spec:
+      containers:
+      - name: devops-pyxis-enzo
+        image: us.icr.io/capacitacion-pyxis/pyxis-devops-enzo:1.0
+        ports:
+          - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-pyxis-enzo-service
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: devops-pyxis-enzo
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+    name: devops-pyxis-enzo-route
+    namespace: default
+spec:
+    to:
+        kind: Service
+        name: devops-pyxis-enzo-service
+
+
+
+
+
+
+
+
+
+
+
+
+
